@@ -72,3 +72,25 @@ jobs:
         run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/cdapi:latest
       - name: Docker push
         run: docker push ${{ secrets.DOCKER_USERNAME }}/cdapi
+
+  restart_docker:
+  needs: [docker]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run Docker Restart Script
+        run: |
+          # Stop the container
+          docker stop sacha2dev/cdapi
+
+          # Pull the latest image
+          docker pull sacha2dev/cdapi:latest
+
+          # Remove the old container
+          docker rm sacha2dev/cdapi
+
+          # Start the container with the latest image
+          docker run -d --name sacha2dev/cdapi:latest
