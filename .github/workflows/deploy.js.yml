@@ -16,4 +16,4 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Start
-        run: npm run start
+        run: pm2 restart pm2.config.js
