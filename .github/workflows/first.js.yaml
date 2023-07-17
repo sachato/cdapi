@@ -74,7 +74,7 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USERNAME }}/cdapi
 
   restart_docker:
-  needs: [docker]
+    needs: [docker]
     runs-on: ubuntu-latest
 
     steps:
