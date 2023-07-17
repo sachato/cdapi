@@ -74,4 +74,3 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: Sacha2dev/cdapi:latest
-          
