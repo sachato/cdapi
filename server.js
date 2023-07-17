@@ -25,7 +25,7 @@ const roger_router = require('./routers/roger')
 /****************************/
 /*** Main router parameters */
 
-app.get('/', (req, res) => res.send(`Sacha is the best`))
+app.get('/', (req, res) => res.send(`Sacha is the best 2.0`))
 
 app.use('/marcel', marcel_router)
 app.use('/roger', roger_router)
