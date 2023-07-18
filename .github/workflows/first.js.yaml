@@ -62,6 +62,12 @@ jobs:
     uses: ./.github/workflows/docker.js.yml
     secrets: inherit
 
+    dockerup:
+    needs: [docker]
+    uses: ./.github/workflows/dockerup.js.yml
+    secrets: inherit
+    
+
   # docker:
   #   needs: [routage]
   #   runs-on: ubuntu-latest

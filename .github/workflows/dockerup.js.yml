@@ -1,10 +1,7 @@
 name: Docker SSH Update
 
 on:
-  workflow_run:
-    workflows: ["Docker"]
-    types:
-      - completed
+  workflow_call
 
 jobs:
   update:
