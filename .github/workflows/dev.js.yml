@@ -1,5 +1,3 @@
-name: First CI
-
 on:
   push:
     branches: ["main"]
@@ -40,11 +38,6 @@ jobs:
           name: code-coverage-report
           path: coverage
 
-  docker:
-    #if: ${{ !contains(github.event.head_commit.message, '#pm2')}}
+  server:
     needs: [routage]
-    uses: ./.github/workflows/docker.js.yml
-    secrets: inherit
-
-    
-
+    uses: ./.github/workflows/deploy.js.yml
