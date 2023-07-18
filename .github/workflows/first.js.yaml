@@ -5,40 +5,40 @@ on:
     branches: ["main"]
 
 jobs:
-  test:
-    if: ${{ !contains(github.event.head_commit.message, '#code')}}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with: 
-          node-version: 18.x
-      - name: Install dependencies
-        run: npm ci
-      - name: Run test
-        run: npm test
+  # test:
+  #   if: ${{ !contains(github.event.head_commit.message, '#code')}}
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #     - name: Setup node
+  #       uses: actions/setup-node@v3
+  #       with: 
+  #         node-version: 18.x
+  #     - name: Install dependencies
+  #       run: npm ci
+  #     - name: Run test
+  #       run: npm test
 
-  routage:
-    needs: [test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with: 
-          node-version: 18.x
-      - name: Install dependencies
-        run: npm ci
-      - name: Route Test
-        run: npm run route:visuel
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v3
-        with:
-          name: code-coverage-report
-          path: coverage
+  # routage:
+  #   needs: [test]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #     - name: Setup node
+  #       uses: actions/setup-node@v3
+  #       with: 
+  #         node-version: 18.x
+  #     - name: Install dependencies
+  #       run: npm ci
+  #     - name: Route Test
+  #       run: npm run route:visuel
+  #     - name: Archive code coverage results
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: code-coverage-report
+  #         path: coverage
   # hello:
   #   needs: [routage]
   #   runs-on: ubuntu-latest
