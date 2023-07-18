@@ -1,0 +1,24 @@
+name: Docker SSH Update
+
+on:
+  workflow_run:
+    workflows: ["Docker"]
+    types:
+      - completed
+
+jobs:
+  update:
+    if: ${{ gitthub.event.workflow_run.conclusion == 'success' }}
+    name: Update Docker Container
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Execute ssh update
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secret.HOST }}
+          username: ${{ secret.USERNAME }}
+          port: ${{ secret.PORT }}
+          key: ${{ secret.SSHKEY }}
+          script: bash update.sh
+          
