@@ -2,7 +2,9 @@ name: First CI
 
 on:
   push:
-    branches: ["main"]
+    branches: 
+      - main
+      - dev
 
 jobs:
   test:
@@ -41,10 +43,16 @@ jobs:
           path: coverage
 
   docker:
+    if: github.ref == 'refs/heads/main'
     #if: ${{ !contains(github.event.head_commit.message, '#pm2')}}
     needs: [routage]
     uses: ./.github/workflows/docker.js.yml
     secrets: inherit
+
+  server:
+    if: github.ref == 'refs/heads/dev'
+    needs: [routage]
+    uses: ./.github/workflows/deploy.js.yml
 
     
 
