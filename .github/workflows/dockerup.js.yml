@@ -21,4 +21,3 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
           script: bash update.sh
-          
