@@ -2,7 +2,10 @@ name: First CI
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - dev
+  pull_request_review:
+    types: [submitted]
 
 jobs:
   test:
@@ -20,93 +23,35 @@ jobs:
       - name: Run test
         run: npm test
 
-  # routage:
-  #   needs: [test]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #     - name: Setup node
-  #       uses: actions/setup-node@v3
-  #       with: 
-  #         node-version: 18.x
-  #     - name: Install dependencies
-  #       run: npm ci
-  #     - name: Route Test
-  #       run: npm run route:visuel
-  #     - name: Archive code coverage results
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: code-coverage-report
-  #         path: coverage
-  # hello:
-  #   needs: [routage]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #     - name: Setup node
-  #       uses: actions/setup-node@v3
-  #       with: 
-  #         node-version: 18.x
-  #     - run: echo Hello World
-  
-  server:
-    if: ${{ contains(github.event.head_commit.message, '#pm2')}}
+  routage:
     needs: [test]
-    uses: ./.github/workflows/deploy.js.yml
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with: 
+          node-version: 18.x
+      - name: Install dependencies
+        run: npm ci
+      - name: Route Test
+        run: npm run route:visuel
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage-report
+          path: coverage
 
   docker:
-    if: ${{ !contains(github.event.head_commit.message, '#pm2')}}
-    needs: [test]
+    if: github.ref == 'refs/heads/main'
+    #if: ${{ !contains(github.event.head_commit.message, '#pm2')}}
+    needs: [routage]
     uses: ./.github/workflows/docker.js.yml
     secrets: inherit
 
-    
+  server:
+    if: github.ref == 'refs/heads/dev'
+    needs: [routage]
+    uses: ./.github/workflows/deploy.js.yml
 
-  # docker:
-  #   needs: [routage]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-      
-  #     - name: Log in to Docker Hub
-  #       uses: docker/login-action@v2
-  #       with:
-  #         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  #         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  #     - name: Extract metadata
-  #       id: meta
-
-      #   env:
-      #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      #   run: |
-      #     docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-      # - name: Build Docker image
-      #   run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/cdapi:latest
-      # - name: Docker push
-      #   run: docker push ${{ secrets.DOCKER_USERNAME }}/cdapi
-
-  # restart_docker:
-  #   needs: [docker]
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v2
-
-  #     - name: Run Docker Restart Script
-  #       run: |
-  #         # Stop the container
-  #         docker stop sacha2dev/cdapi
-
-  #         # Pull the latest image
-  #         docker pull sacha2dev/cdapi:latest
-
-  #         # Remove the old container
-  #         docker rm sacha2dev/cdapi
-
-  #         # Start the container with the latest image
-  #         docker run -d --name sacha2dev/cdapi:latest
