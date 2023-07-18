@@ -62,7 +62,7 @@ jobs:
     uses: ./.github/workflows/docker.js.yml
     secrets: inherit
 
-    dockerup:
+  dockerup:
     needs: [docker]
     uses: ./.github/workflows/dockerup.js.yml
     secrets: inherit
