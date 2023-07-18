@@ -2,8 +2,8 @@ name: First CI
 
 on:
   pull_request:
-    types: ["close"]
     branches: ["main"]
+    types: ["closed"]
 
 jobs:
   test:
