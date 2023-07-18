@@ -2,9 +2,10 @@ name: First CI
 
 on:
   push:
-    branches: 
-      - main
+    branches:
       - dev
+  pull_request_review:
+    types: [submitted]
 
 jobs:
   test:
